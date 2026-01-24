@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+    {% block page_title %}
+        Lista de Tarefas
+    {% endblock page_title %}
+    
+    {% block content %}
+        <h1>Lista de Tarefas</h1>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Titulo</th>
+                    <th scope="col">Criado em:</th>
+                    <th scope="col">Prazo Para:</th>
+                    <th scope="col">Terminado em:</th>
+                    <th scope="col">Ações</th>
+                </tr>
+            </thead>
+            {% if todo_list %}
+                {% for todo in todo_list %}
+                    <tbody>
+                        <tr>
+                            <td>{{ todo.pk }}</td>
+                            <td>{{ todo.title }}</td>
+                            <td>{{ todo.created_at }}</td>
+                            <td>{{ todo.deadline }}</td>
+                            <td>{{ todo.finished_at|default:"-" }}</td>
+                            <td>
+                                <a href="{% url "todo_complete" pk=todo.pk %}" class="btn btn-success btn-sm {% if todo.finished_at %}disabled{% endif %}" >Concluir</a>
+                                <a href="{% url "todo_update" pk=todo.pk %}" class="btn btn-secondary btn-sm {% if todo.finished_at %}disabled{% endif %}" >Editar</a>
+                                <a href="{% url "todo_delete" pk=todo.pk %}" class="btn btn-danger btn-sm">Excluir</a>
+                                
+                            </td>
+                        </tr>
+                    </tbody>
+                {% endfor  %}
+            {% else %}
+                <tbody>
+                    <tr>
+                        <td>{{ "-" }}</td>
+                        <td>{{ "-" }}</td>
+                        <td>{{ "-" }}</td>
+                        <td>{{ "-" }}</td>
+                        <td>{{ "-" }}</td>
+                        <td>{{ "-" }}</td>
+                    </tr>
+                </tbody>
+            {% endif %}
+        </table>
+        <a href="{% url 'todo_create' %}" class="btn btn-primary">Nova Tarefa</a>
+    {% endblock content %}
+        
